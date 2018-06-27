@@ -18,7 +18,7 @@
     "testonly": "mocha --reporter spec --full-trace ./dist/__tests__/*.js",
     "testonly-watch": "mocha --reporter spec --full-trace ./dist/__tests__/*.js --watch",
     "coverage": "node ./node_modules/istanbul/lib/cli.js cover _mocha -- --full-trace ./dist/__tests__/*.js",
-    "postcoverage": "remap-istanbul --input coverage/coverage.raw.json --type lcovonly --output coverage/lcov.info",
+    "postcoverage": "remap-istanbul --input coverage/coverage.json --type lcovonly --output coverage/lcov.info",
     "prepublishOnly": "npm run clean && npm run compile"
   },
   "peerDependencies": {
