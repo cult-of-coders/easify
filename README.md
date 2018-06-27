@@ -8,6 +8,14 @@ The idea of easify is to simplify the following:
 
 Using [react-molecule](https://github.com/cult-of-coders/react-molecule) to power the awesomeness. Please make sure you understand how it works, so you can reason about this package as well.
 
+## Install
+
+The peer dependencies:
+`npm install --save react-molecule mobx mobx-react react-paginate simpl-schema`
+
+The package:
+`npm install --save easify`
+
 ## The Agents
 
 So, our James Bonds are:
