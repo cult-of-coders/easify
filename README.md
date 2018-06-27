@@ -1,9 +1,12 @@
 # Easify
 
+[![Build Status](https://travis-ci.org/cult-of-coders/easify.svg?branch=master)](https://travis-ci.org/cult-of-coders/easify)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+
 The idea of easify is to simplify the following:
 
 - Creating tables with sort and pagination
-- Having easy to build filters
+- Making life easy around building filters for your lists
 - Creating lists of data with load more
 
 Using [react-molecule](https://github.com/cult-of-coders/react-molecule) to power the awesomeness. Please make sure you understand how it works, so you can reason about this package as well.
