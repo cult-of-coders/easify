@@ -15,9 +15,9 @@
     "posttest": "npm run lint",
     "lint": "tslint --type-check --project ./tsconfig.json ./src/**/*",
     "watch": "tsc -w",
-    "testonly": "mocha --reporter spec --full-trace ./dist/test/*.js",
+    "testonly": "mocha --reporter spec --full-trace ./dist/__tests__/*.js",
     "testonly-watch": "mocha --reporter spec --full-trace ./dist/__tests__/*.js --watch",
-    "coverage": "node ./node_modules/istanbul/lib/cli.js cover _mocha -- --full-trace ./dist/test/*.js",
+    "coverage": "node ./node_modules/istanbul/lib/cli.js cover _mocha -- --full-trace ./dist/__tests__/*.js",
     "postcoverage": "remap-istanbul --input coverage/coverage.raw.json --type lcovonly --output coverage/lcov.info",
     "prepublishOnly": "npm run clean && npm run compile"
   },
