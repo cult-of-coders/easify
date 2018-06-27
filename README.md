@@ -11,6 +11,8 @@ The idea of easify is to simplify the following:
 
 Using [react-molecule](https://github.com/cult-of-coders/react-molecule) to power the awesomeness. Please make sure you understand how it works, so you can reason about this package as well.
 
+Start toying around with it here: https://codesandbox.io/s/2l5lvl1nn
+
 ## Install
 
 The peer dependencies:
