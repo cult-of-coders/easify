@@ -20,6 +20,11 @@ export function defaultToFilter(value, name) {
     };
   }
 
+  // Here we need to carefully prevent null from becoming an actual filter or an empty string
+  if (value === '' || value === null) {
+    return null;
+  }
+
   return {
     [name]: value,
   };
@@ -35,6 +40,7 @@ export function getMongoFilters(schema, values) {
     const toFilter = easifyOptions.toFilter || defaultToFilter;
     const filter = toFilter(value, KEY, filters);
 
+    // If it's a falsey value we don't assign anything.
     if (filter && typeof filter === 'object') {
       Object.assign(filters, {
         ...filter,

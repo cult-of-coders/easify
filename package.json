@@ -23,7 +23,6 @@
   "peerDependencies": {
     "react": "16.x",
     "react-molecule": "0.1.x",
-    "react-paginate": "5.x",
     "simpl-schema": "1.x",
     "mobx": "5.x.x",
     "mobx-react": "5.x.x"
@@ -41,8 +40,6 @@
     "mocha": "^3.3.0",
     "react": "16.3.1",
     "react-dom": "^16.3.1",
-    "react-molecule": "^0.1.4",
-    "react-paginate": "^5.2.2",
     "remap-istanbul": "^0.11.1",
     "rimraf": "^2.6.2",
     "simpl-schema": "^1.5.0",

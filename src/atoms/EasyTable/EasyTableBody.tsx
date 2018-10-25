@@ -34,16 +34,9 @@ export class EasyTableBody extends React.Component<Props> {
       value = object[field.resolve];
     }
 
-    return <EasyTableRowElement key={field.label}>{value}</EasyTableRowElement>;
-  }
-
-  renderActions(object) {
-    const { molecule, model } = this.props;
-    const { EasyTableRowElement } = molecule.registry;
-
     return (
-      <EasyTableRowElement>
-        {model.actions.render({ object, molecule })}
+      <EasyTableRowElement key={field.label} value={value}>
+        {value}
       </EasyTableRowElement>
     );
   }
@@ -93,9 +86,9 @@ export class EasyTableBody extends React.Component<Props> {
           data.map(item => (
             <EasyTableRow
               key={model.key ? model.key({ object: item, molecule }) : item._id}
+              item={item}
             >
               {this.renderRow(item)}
-              {model.actions && this.renderActions(item)}
             </EasyTableRow>
           ))}
       </EasyTableBody>

@@ -1,7 +1,6 @@
 export type EasyTableModel = {
   key?: (object: any) => any;
   fields: EasyTableModelField[];
-  actions?: EasyTableModelActions;
 };
 
 export type EasyTableModelActions = {
