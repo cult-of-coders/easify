@@ -13,31 +13,5 @@ describe('EasyLoadMore', () => {
 
     // To implement
     return;
-
-    const agents = {
-      loader: molecule =>
-        new EasyLoaderAgent({
-          molecule: molecule,
-          filters: { test: 1 },
-          options: { test: 2 },
-          load: () =>
-            new Promise<any>((resolve, reject) => {
-              resolve([{ _id: 1, name: 'Johnas Smith' }]);
-            }),
-        }),
-      loadMore: molecule =>
-        new EasyLoadMoreAgent({
-          molecule,
-          count: () => new Promise<number>((resolve, reject) => resolve(1000)),
-        }),
-    };
-
-    const molecule = new MoleculeModel({
-      agents,
-    });
-
-    molecule.init();
-
-    const { loader, loadMore } = molecule.agents;
   });
 });

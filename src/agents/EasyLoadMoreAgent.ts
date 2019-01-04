@@ -1,5 +1,6 @@
 import { Agent } from 'react-molecule';
-import { observable, toJS } from 'mobx';
+// Leave IObservableObject otherwise it will complain in tsc compilation
+import { observable, toJS, IObservableObject } from 'mobx';
 import EasyLoaderAgent, { LoaderEvents } from './EasyLoaderAgent';
 
 class EasyLoadMoreAgent extends Agent {

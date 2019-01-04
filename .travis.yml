@@ -4,8 +4,8 @@ node_js:
 
 install:
   - npm install -g coveralls
+  - npm install react-molecule mobx mobx-react # Peer deps
   - npm install
-  - npm install react-molecule mobx mobx-react
 
 script:
   - npm test
