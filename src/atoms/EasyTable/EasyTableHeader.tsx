@@ -111,14 +111,6 @@ export default class EasyTableHeader extends React.Component<Props> {
       );
     });
 
-    if (model.actions) {
-      ths.push(
-        <EasyTableHeadElement key={'actions'}>
-          {model.actions.label}
-        </EasyTableHeadElement>
-      );
-    }
-
     return (
       <EasyTableHead>
         <EasyTableRow>{ths}</EasyTableRow>

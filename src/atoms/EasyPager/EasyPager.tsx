@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { withMolecule, MoleculeModel } from 'react-molecule';
 import { observer } from 'mobx-react';
-import * as Pagination from 'react-paginate';
-import EasyPagerAgent from '../../agents/EasyPagerAgent';
 
 interface Props {
   molecule: MoleculeModel;
@@ -32,26 +30,14 @@ class EasyPager extends React.Component<Props> {
     const { molecule } = this.props;
     const { total, currentPage, perPage } = store;
 
-    let pageCount = parseInt((total / perPage).toString());
-    if (total % perPage) {
-      pageCount++;
-    }
-
     const { EasyPagination } = molecule.registry;
 
     return (
       <EasyPagination
-        pageCount={pageCount}
-        forcePage={currentPage}
+        total={total}
+        currentPage={currentPage}
+        perPage={perPage}
         onPageChange={this.onPageChange}
-        pageRangeDisplayed={2}
-        marginPagesDisplayed={1}
-        containerClassName="pagination"
-        pageClassName="page-item"
-        pageLinkClassName="page-link"
-        activeClassName="active"
-        nextLabel={null}
-        previousLabel={null}
         {...this.props}
       />
     );

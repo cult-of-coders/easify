@@ -1,9 +1,14 @@
 import { Agent } from 'react-molecule';
-import { observable, toJS } from 'mobx';
+// Leave IObservableObject otherwise it will complain in tsc compilation
+import { observable, toJS, IObservableObject } from 'mobx';
 import EasyLoaderAgent, { LoaderEvents } from './EasyLoaderAgent';
 
 class EasyLoadMoreAgent extends Agent {
   loaderAgent: EasyLoaderAgent;
+
+  // This variable becomes true whenever the selectors inside the molecule change
+  // It becomes false again after the data has been loaded
+  duringSelectorsChangedProcess: boolean = false;
 
   config: {
     initialItemsCount: number;
@@ -24,6 +29,17 @@ class EasyLoadMoreAgent extends Agent {
 
     loaderAgent.on(LoaderEvents.LOADING, ({ options }) => {
       const { initialItemsCount, loadItemsCount } = this.config;
+
+      // If the selectors have changed we basically need to fully reload the initial items count
+      if (this.duringSelectorsChangedProcess) {
+        Object.assign(options, {
+          limit: initialItemsCount,
+          skip: 0,
+        });
+
+        return;
+      }
+
       const { totalLoaded } = this.store;
 
       Object.assign(options, {
@@ -35,7 +51,11 @@ class EasyLoadMoreAgent extends Agent {
     loaderAgent.on(LoaderEvents.LOADED, payload => {
       const { data } = toJS(loaderAgent.store);
 
-      payload.data = [...data, ...payload.data];
+      if (!this.duringSelectorsChangedProcess) {
+        payload.data = [...data, ...payload.data];
+      } else {
+        this.duringSelectorsChangedProcess = false;
+      }
 
       this.store.totalLoaded = payload.data.length;
       this.updateHasMore();
@@ -44,6 +64,8 @@ class EasyLoadMoreAgent extends Agent {
 
   init() {
     this.loaderAgent.on(LoaderEvents.SELECTORS_CHANGED, () => {
+      this.duringSelectorsChangedProcess = true;
+
       Object.assign(this.store, {
         totalLoaded: 0,
         hasMore: undefined,

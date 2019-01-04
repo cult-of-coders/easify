@@ -41,7 +41,8 @@ class EasyFilters extends React.Component<Props> {
 
     preFilter && preFilter(filters);
 
-    this.loaderAgent.update({
+    // Filters get overrided
+    this.loaderAgent.override({
       filters,
     });
   };
