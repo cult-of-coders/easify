@@ -163,16 +163,14 @@ const tableModel = {
       resolve({ object }) {
         return <span className="make-it-red">{object._id}</span>
       }
+    },
+    {
+      label: 'Actions',
+      resolve({ object }) {
+        return <a href={`/edit/${object._id}`}>Edit</a>;
+      },
     }
   ],
-
-  // Optionally have an Actions column at the end
-  actions: {
-    label: 'Actions',
-    render({ object }) {
-      return <a href={`/edit/${object._id}`}>Edit</a>;
-    },
-  }
 }
 
 const MyList = () => {
