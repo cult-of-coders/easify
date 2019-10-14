@@ -3,24 +3,20 @@
 [![Build Status](https://travis-ci.org/cult-of-coders/easify.svg?branch=master)](https://travis-ci.org/cult-of-coders/easify)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-The idea from Easify came when we realised the fact that you have to orchestrate many things in order to have a complex list with items interacting with the data, filtering it, sorting it, paginating it, having a search on it.
-
-Our background was PHP, we only knew server-rendered complex tables, we had to re-invent a way to do it with React.
-
-This is how [React Molecule](https://github.com/cult-of-coders/react-molecule) was born. A framework had to be designed to allow complex inter-component communication by introducing a new layer between logic and views. It would be a good idea to understand how it works, because it was built to build this package :)
-
 Easify is API Agnostic and Extremely Hackable and helps you do the following:
 
 - Creating simple lists with filters
 - Creating tables with sort, pagination, search-bars, custom filters
 - Creating load more lists
 
+...by being **completely agnostic** to the way you fetch your data.
+
 Start toying around with it here: https://codesandbox.io/s/2l5lvl1nn
 
 ## Install
 
 The peer dependencies:
-`npm install --save react-molecule mobx mobx-react react-paginate simpl-schema`
+`npm install --save react-molecule mobx mobx-react simpl-schema`
 
 The package:
 `npm install --save easify`
@@ -36,6 +32,7 @@ The package:
 A simple example is illustrated below, how from a `Promise` we render our data.
 
 ```jsx
+import { molecule } from "react-molecule";
 import { EasyLoaderAgent, EasyList } from "easify";
 
 // We have to pass a way to load the object to our easy loader, and that function needs to return a promise.
@@ -58,14 +55,19 @@ const load = ({ filters, options }) =>
     }, 500);
   });
 
-const MyList = () => (
-  <Molecule agents={{ loader: EasyLoaderAgent.factory({ load }) }}>
+const MyList = molecule(
+  () => {
+    return {
+      loader: EasyLoaderAgent.factory({ load })
+    };
+  },
+  () => (
     <EasyList>
       {({ data, loading, molecule }) => {
         return data.map(item => <Item item={item} key={item._id} />);
       }}
     </EasyList>
-  </Molecule>
+  )
 );
 ```
 
@@ -83,22 +85,24 @@ const count = filters =>
     }, 500);
   });
 
-const MyList = () => {
-  const agents = {
+const MyList = molecule(
+  () => ({
     loader: EasyLoaderAgent.factory({ load }),
     pager: EasyPagerAgent.factory({ count, perPage: 10 })
-  };
-  return (
-    <Molecule agents={agents}>
-      <EasyPager />
-      <EasyList>
-        {({ data, loading, molecule }) => {
-          return data.map(item => <Item item={item} key={item._id} />);
-        }}
-      </EasyList>
-    </Molecule>
-  );
-};
+  }),
+  () => {
+    return (
+      <>
+        <EasyPager />
+        <EasyList>
+          {({ data, loading, molecule }) => {
+            return data.map(item => <Item item={item} key={item._id} />);
+          }}
+        </EasyList>
+      </>
+    );
+  }
+);
 ```
 
 ## Load More
@@ -113,28 +117,33 @@ import {
   EasyPager
 } from "easify";
 
-const MyList = () => {
-  const agents = {
-    loader: EasyLoaderAgent.factory({ load }),
-    loadMore: EasyLoadMoreAgent.factory({
-      count,
-      initialItemsCount: 20,
-      loadItemsCount: 10
-    })
-  };
+const MyList = molecule(
+  () => {
+    return {
+      agents: {
+        loader: EasyLoaderAgent.factory({ load }),
+        loadMore: EasyLoadMoreAgent.factory({
+          count,
+          initialItemsCount: 20,
+          loadItemsCount: 10
+        })
+      }
+    };
+  },
+  () => {
+    return (
+      <>
+        <EasyList>
+          {({ data, loading, molecule }) => {
+            return data.map(item => <Item item={item} key={item._id} />);
+          }}
+        </EasyList>
 
-  return (
-    <Molecule agents={agents}>
-      <EasyList>
-        {({ data, loading, molecule }) => {
-          return data.map(item => <Item item={item} key={item._id} />);
-        }}
-      </EasyList>
-
-      <EasyLoadMore />
-    </Molecule>
-  );
-};
+        <EasyLoadMore />
+      </>
+    );
+  }
+);
 ```
 
 ## EasyTable & Pager
@@ -148,50 +157,55 @@ import {
   EasyLoaderAgent,
   EasyLoadMoreAgent,
   EasyList,
-  EasyPagerAgent,
-} from 'easify';
+  EasyPagerAgent
+} from "easify";
 
 const tableModel = {
   // React needs to know the key of an array, so we need to uniquely identify an object
-  key(({object})) {
-    return item._id;
+  key({ object }) {
+    return object._id;
   },
 
   fields: [
     {
-      label: 'First Name',
-      resolve: 'firstName',
-      sort: 'firstName' // The field it should sort on, if not specified it will not have sorting ability
+      label: "First Name",
+      resolve: "firstName",
+      sort: "firstName" // The field it should sort on, if not specified it will not have sorting ability
     },
     {
-      label: 'Id',
+      label: "Id",
       // Resolve can also be a function that returns a React renderable
       resolve({ object }) {
-        return <span className="make-it-red">{object._id}</span>
+        return <span className="make-it-red">{object._id}</span>;
       }
     },
     {
-      label: 'Actions',
+      label: "Actions",
       resolve({ object }) {
         return <a href={`/edit/${object._id}`}>Edit</a>;
-      },
+      }
     }
-  ],
-}
-
-const MyList = () => {
-  const agents = {
-    loader: EasyLoaderAgent.factory({ load }),
-    pager: EasyPagerAgent.factory({ count }),
-  };
-
-  return (
-    <Molecule agents={agents}>
-      <EasyTable model={tableModel} />
-      <EasyPager />
-    </Molecule>
-  );
+  ]
 };
+
+const MyList = molecule(
+  () => {
+    return {
+      agents: {
+        loader: EasyLoaderAgent.factory({ load }),
+        pager: EasyPagerAgent.factory({ count })
+      }
+    };
+  },
+  () => {
+    return (
+      <>
+        <EasyTable model={tableModel} />
+        <EasyPager />
+      </>
+    );
+  }
+);
 ```
 
 ## Filtering your data
@@ -203,7 +217,7 @@ We'll show first a simple example where we search stuff in an input:
 ```jsx
 const MyList = () => {
   return (
-    <Molecule agents={agents}>
+    <>
       <EasyFilters>
         {({ doFilter }) => {
           return (
@@ -217,7 +231,7 @@ const MyList = () => {
       <hr />
       <EasyTable model={tableModel} />
       <EasyPager />
-    </Molecule>
+    </>
   );
 };
 ```
@@ -252,7 +266,7 @@ const FilterSchema = new SimpleSchema({
 // No matter how you choose to position them
 const MyList = () => {
   return (
-    <Molecule agents={agents}>
+    <>
       <EasyFilters schema={FilterSchema}>
         {({ onSubmit }) => (
           // This form is created from your Schema
@@ -262,7 +276,7 @@ const MyList = () => {
       <hr />
       <EasyTable model={tableModel} />
       <EasyPager />
-    </Molecule>
+    </>
   );
 };
 ```
